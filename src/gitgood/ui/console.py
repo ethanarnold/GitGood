@@ -83,6 +83,16 @@ class GitGoodConsole:
         """Reset panel tracking (call after non-panel output)."""
         self._last_panel_height = 0
 
+    def track_panel_for_clearing(self) -> None:
+        """Track last panel's height for instruction clearing (call after print_panel)."""
+        self._lines_since_instruction += self._last_panel_height
+
+    def clear_previous_content(self) -> None:
+        """Clear all tracked content for a fresh start."""
+        self._clear_lines(self._lines_since_instruction)
+        self._lines_since_instruction = 0
+        self._last_panel_height = 0
+
     def print_welcome(self) -> None:
         """Display welcome message and ASCII art."""
         self.console.print()
@@ -117,9 +127,9 @@ class GitGoodConsole:
         # Clear everything since last instruction (old instruction + user input + outputs)
         if replace_previous and self._lines_since_instruction > 0:
             self._clear_lines(self._lines_since_instruction)
+            # Only add blank line when replacing (fresh start already has spacing)
+            self.console.print()
 
-        # Print new instruction with blank line before
-        self.console.print()
         self.console.print(panel)
 
         # Track this instruction's height for next replacement

@@ -174,8 +174,10 @@ class GitGoodApp:
 
         panel = LessonListPanel().render(lessons, self.lesson_engine.completed_lessons)
         self.console.print_panel(panel, replace_previous=True)
+        self.console.track_panel_for_clearing()  # Track so instruction can clear it
 
         self.console.console.print()
+        self.console.note_input_line()  # Track the blank line
         self.console.print_info("Type 'lesson <number>' to start a lesson.")
         self.console.reset_panel_tracking()  # Don't replace the info text
 
@@ -222,11 +224,8 @@ class GitGoodApp:
                 self.console.print_error("Failed to start lesson.")
             return
 
-        lesson = self.lesson_engine.current_lesson
-        if lesson:
-            self.console.console.print()
-            self.console.print_info(f"Starting lesson: {lesson.title}")
-            self.console.print_divider()
+        if self.lesson_engine.current_lesson:
+            self.console.clear_previous_content()  # Clear lesson list panel
 
     def _handle_lesson_complete(self) -> None:
         """Handle lesson completion."""
