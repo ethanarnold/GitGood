@@ -1,7 +1,6 @@
 """Main application orchestrator."""
 
-from rich.columns import Columns
-from rich.console import Group
+import signal
 
 from .core.repository import VirtualRepository
 from .core.github_api import SimulatedGitHub
@@ -11,7 +10,7 @@ from .lessons.engine import LessonEngine, StepType
 from .lessons.loader import load_lessons_from_directory, get_default_lessons_dir
 from .ui.console import GitGoodConsole
 from .ui.prompt import CommandPrompt
-from .ui.panels import StatusPanel, LessonProgressPanel, LessonListPanel
+from .ui.panels import StatusPanel, LessonListPanel
 from .ui.tree_view import CommitTreeRenderer
 
 
@@ -29,9 +28,15 @@ class GitGoodApp:
         self.tree_renderer = CommitTreeRenderer(self.repo)
         self.running = True
 
+        # Register resize handler
+        signal.signal(signal.SIGWINCH, self._on_resize)
+
+    def _on_resize(self, signum, frame) -> None:
+        """Handle terminal resize by redrawing."""
+        self.console.redraw()
+
     def run(self) -> None:
         """Main application loop."""
-        self.console.console.clear()
         self.console.print_welcome()
 
         # Load lessons
@@ -69,7 +74,6 @@ class GitGoodApp:
             # For explanation steps, just wait for enter
             if step.step_type == StepType.EXPLANATION:
                 self.prompt.get_simple_input("Press Enter to continue...")
-                self.console.note_input_line()
                 self.lesson_engine.advance_step()
 
                 # Check if lesson is complete
@@ -80,10 +84,12 @@ class GitGoodApp:
         # Get user input
         current_branch = self.repo.get_current_branch()
         user_input = self.prompt.get_input(current_branch)
-        self.console.note_input_line()
 
         if not user_input:
             return
+
+        # Track the input in output buffer
+        self.console.add_input_line(f"$ ({current_branch}) {user_input}")
 
         # Handle internal commands
         if user_input.lower() in ("quit", "exit"):
@@ -173,13 +179,9 @@ class GitGoodApp:
             return
 
         panel = LessonListPanel().render(lessons, self.lesson_engine.completed_lessons)
-        self.console.print_panel(panel, replace_previous=True)
-        self.console.track_panel_for_clearing()  # Track so instruction can clear it
+        self.console.print_panel(panel)
 
-        self.console.console.print()
-        self.console.note_input_line()  # Track the blank line
         self.console.print_info("Type 'lesson <number>' to start a lesson.")
-        self.console.reset_panel_tracking()  # Don't replace the info text
 
     def _start_lesson(self, lesson_ref: str) -> None:
         """Start a lesson by number or ID."""
@@ -212,6 +214,9 @@ class GitGoodApp:
         self.lesson_engine.repo = self.repo
         self.tree_renderer = CommitTreeRenderer(self.repo)
 
+        # Clear output buffer for fresh lesson
+        self.console.clear_output_buffer()
+
         step = self.lesson_engine.start_lesson(lesson_id)
 
         if not step:
@@ -223,9 +228,6 @@ class GitGoodApp:
             else:
                 self.console.print_error("Failed to start lesson.")
             return
-
-        if self.lesson_engine.current_lesson:
-            self.console.clear_previous_content()  # Clear lesson list panel
 
     def _handle_lesson_complete(self) -> None:
         """Handle lesson completion."""
@@ -242,12 +244,12 @@ class GitGoodApp:
     def _show_status(self) -> None:
         """Show repository status panel."""
         panel = StatusPanel(self.repo).render()
-        self.console.print_panel(panel, replace_previous=True)
+        self.console.print_panel(panel)
 
     def _show_tree(self) -> None:
         """Show commit tree."""
         panel = self.tree_renderer.render()
-        self.console.print_panel(panel, replace_previous=True)
+        self.console.print_panel(panel)
 
 
 def main() -> None:
