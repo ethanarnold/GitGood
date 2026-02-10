@@ -31,6 +31,7 @@ class GitGoodApp:
 
     def run(self) -> None:
         """Main application loop."""
+        self.console.console.clear()
         self.console.print_welcome()
 
         # Load lessons
@@ -68,6 +69,7 @@ class GitGoodApp:
             # For explanation steps, just wait for enter
             if step.step_type == StepType.EXPLANATION:
                 self.prompt.get_simple_input("Press Enter to continue...")
+                self.console.note_input_line()
                 self.lesson_engine.advance_step()
 
                 # Check if lesson is complete
@@ -78,6 +80,7 @@ class GitGoodApp:
         # Get user input
         current_branch = self.repo.get_current_branch()
         user_input = self.prompt.get_input(current_branch)
+        self.console.note_input_line()
 
         if not user_input:
             return
@@ -170,10 +173,11 @@ class GitGoodApp:
             return
 
         panel = LessonListPanel().render(lessons, self.lesson_engine.completed_lessons)
-        self.console.console.print(panel)
+        self.console.print_panel(panel, replace_previous=True)
 
         self.console.console.print()
         self.console.print_info("Type 'lesson <number>' to start a lesson.")
+        self.console.reset_panel_tracking()  # Don't replace the info text
 
     def _start_lesson(self, lesson_ref: str) -> None:
         """Start a lesson by number or ID."""
@@ -239,12 +243,12 @@ class GitGoodApp:
     def _show_status(self) -> None:
         """Show repository status panel."""
         panel = StatusPanel(self.repo).render()
-        self.console.console.print(panel)
+        self.console.print_panel(panel, replace_previous=True)
 
     def _show_tree(self) -> None:
         """Show commit tree."""
         panel = self.tree_renderer.render()
-        self.console.console.print(panel)
+        self.console.print_panel(panel, replace_previous=True)
 
 
 def main() -> None:
