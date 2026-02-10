@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-GHFlow is an interactive CLI tool that teaches GitHub flow through hands-on simulation. Users practice real git/gh commands in a virtual repository environment with structured lessons and real-time validation.
+GitGood is an interactive CLI tool that teaches GitHub flow through hands-on simulation. Users practice real git/gh commands in a virtual repository environment with structured lessons and real-time validation.
 
 ## Build & Run Commands
 
@@ -13,19 +13,19 @@ GHFlow is an interactive CLI tool that teaches GitHub flow through hands-on simu
 pip install -e ".[dev]"
 
 # Run the application
-ghflow
+gitgood
 # or
-python -m ghflow
+python -m gitgood
 
 # Run tests
 pytest
-pytest --cov=src/ghflow tests/    # with coverage
+pytest --cov=src/gitgood tests/    # with coverage
 pytest tests/test_repository.py   # single file
 
 # Linting and type checking
 ruff check src/ tests/
 ruff check --fix src/ tests/      # auto-fix
-mypy src/ghflow
+mypy src/gitgood
 ```
 
 ## Architecture
@@ -33,8 +33,8 @@ mypy src/ghflow
 The codebase has 5 main modules with distinct responsibilities:
 
 ```
-src/ghflow/
-├── app.py              # Main REPL orchestrator (GHFlowApp)
+src/gitgood/
+├── app.py              # Main REPL orchestrator (GitGoodApp)
 ├── core/               # Virtual repository simulation
 │   ├── repository.py   # VirtualRepository - in-memory git state
 │   ├── models.py       # Commit, Branch, PR, CommandResult
@@ -48,7 +48,7 @@ src/ghflow/
 │   ├── loader.py       # YAML lesson file loading
 │   └── data/           # 6 lesson YAML files (01-06)
 └── ui/                 # Terminal interface (Rich/prompt_toolkit)
-    ├── console.py      # GHFlowConsole - styled output
+    ├── console.py      # GitGoodConsole - styled output
     ├── prompt.py       # CommandPrompt - interactive input
     ├── panels.py       # Status, progress, lesson list panels
     └── tree_view.py    # Commit history visualization

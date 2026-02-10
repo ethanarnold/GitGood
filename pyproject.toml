@@ -1,5 +1,5 @@
 [project]
-name = "ghflow"
+name = "gitgood"
 version = "0.1.0"
 description = "Interactive CLI tool to learn GitHub flow"
 requires-python = ">=3.10"
@@ -19,7 +19,7 @@ dev = [
 ]
 
 [project.scripts]
-ghflow = "ghflow.__main__:main"
+gitgood = "gitgood.__main__:main"
 
 [build-system]
 requires = ["setuptools>=61.0"]

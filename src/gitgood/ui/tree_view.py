@@ -72,7 +72,7 @@ class CommitTreeRenderer:
 
         if decorations:
             dec_str = ", ".join(decorations)
-            parts.append(f"[magenta]({dec_str})[/magenta]")
+            parts.append(f"[orange1]({dec_str})[/orange1]")
 
         # Truncate message if too long
         message = commit.message

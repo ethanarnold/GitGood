@@ -23,23 +23,23 @@ class StatusPanel:
         lines = []
 
         # Current branch
-        lines.append(f"On branch [magenta bold]{status.current_branch}[/magenta bold]")
+        lines.append(f"On branch [orange1 bold]{status.current_branch}[/orange1 bold]")
 
         # Remote tracking info
         if status.upstream:
             if status.ahead > 0:
                 lines.append(
-                    f"Your branch is ahead of '[cyan]{status.upstream}[/cyan]' "
+                    f"Your branch is ahead of '[orange1]{status.upstream}[/orange1]' "
                     f"by {status.ahead} commit(s)"
                 )
             elif status.behind > 0:
                 lines.append(
-                    f"Your branch is behind '[cyan]{status.upstream}[/cyan]' "
+                    f"Your branch is behind '[orange1]{status.upstream}[/orange1]' "
                     f"by {status.behind} commit(s)"
                 )
             else:
                 lines.append(
-                    f"Your branch is up to date with '[cyan]{status.upstream}[/cyan]'"
+                    f"Your branch is up to date with '[orange1]{status.upstream}[/orange1]'"
                 )
 
         # Staged changes
@@ -63,8 +63,8 @@ class StatusPanel:
 
         return Panel(
             "\n".join(lines),
-            title="[bold]Repository Status[/bold]",
-            border_style="blue",
+            title="[bold #c15f3c]Repository Status[/bold #c15f3c]",
+            border_style="#c15f3c",
             padding=(0, 1),
         )
 
@@ -103,8 +103,8 @@ class LessonProgressPanel:
 
         return Panel(
             "\n".join(lines),
-            title="[bold]Lesson Progress[/bold]",
-            border_style="cyan",
+            title="[bold #c15f3c]Lesson Progress[/bold #c15f3c]",
+            border_style="#c15f3c",
             padding=(0, 1),
         )
 
@@ -138,7 +138,7 @@ class LessonListPanel:
 
         return Panel(
             table,
-            title="[bold]GitHub Flow Lessons[/bold]",
-            border_style="blue",
+            title="[bold #c15f3c]GitHub Flow Lessons[/bold #c15f3c]",
+            border_style="#c15f3c",
             padding=(1, 2),
         )

@@ -1,1 +1,1 @@
-"""Tests for ghflow package."""
+"""Tests for gitgood package."""

@@ -7,10 +7,10 @@ from prompt_toolkit.styles import Style
 from prompt_toolkit.formatted_text import HTML
 
 
-# Prompt style
+# Prompt style (Claude Code inspired: orange/terracotta)
 PROMPT_STYLE = Style.from_dict({
-    "prompt": "ansigreen bold",
-    "branch": "ansimagenta",
+    "prompt": "ansiwhite bold",
+    "branch": "ansiwhite",
 })
 
 

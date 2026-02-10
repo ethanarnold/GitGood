@@ -7,46 +7,47 @@ from rich.text import Text
 from rich.markdown import Markdown
 
 
-# Custom theme for the application
-GHFLOW_THEME = Theme({
-    "info": "cyan",
+# Custom theme for the application (Claude Code inspired: orange/terracotta)
+GITGOOD_THEME = Theme({
+    "info": "orange1",
     "success": "green bold",
     "warning": "yellow",
     "error": "red bold",
     "command": "bright_white on grey23",
-    "branch": "magenta bold",
+    "branch": "orange1 bold",
     "commit": "yellow",
-    "instruction": "cyan",
-    "hint": "dim cyan italic",
+    "instruction": "orange1",
+    "hint": "dim orange1 italic",
     "prompt": "green bold",
-    "header": "bold blue",
+    "header": "bold orange1",
 })
 
 
 WELCOME_ART = """
-   _____ _ _   _    _       _       ______ _
-  / ____(_) | | |  | |     | |     |  ____| |
- | |  __ _| |_| |__| |_   _| |__   | |__  | | _____      __
- | | |_ | | __|  __  | | | | '_ \\  |  __| | |/ _ \\ \\ /\\ / /
- | |__| | | |_| |  | | |_| | |_) | | |    | | (_) \\ V  V /
-  \\_____|_|\\__|_|  |_|\\__,_|_.__/  |_|    |_|\\___/ \\_/\\_/
+   _____ _ _    _____                 _
+  / ____(_) |  / ____|               | |
+ | |  __ _| |_| |  __  ___   ___   __| |
+ | | |_ | | __| | |_ |/ _ \\ / _ \\ / _` |
+ | |__| | | |_| |__| | (_) | (_) | (_| |
+  \\_____|_|\\__|\\_____|\\___/ \\___/ \\__,_|
 """
 
 
-class GHFlowConsole:
+class GitGoodConsole:
     """Wrapper around Rich console with app-specific methods."""
 
     def __init__(self):
-        self.console = Console(theme=GHFLOW_THEME)
+        self.console = Console(theme=GITGOOD_THEME)
 
     def print_welcome(self) -> None:
         """Display welcome message and ASCII art."""
         self.console.print()
-        self.console.print(WELCOME_ART, style="bold blue")
+        art = Text(WELCOME_ART)
+        art.stylize("#c15f3c")
+        self.console.print(art)
         self.console.print()
         self.console.print(
-            "Learn GitHub Flow interactively by typing real git commands!",
-            style="info",
+            "[white]⏺ Learn GitHub Flow interactively by typing real git commands![/white]",
         )
         self.console.print()
         self.console.print(
@@ -62,8 +63,8 @@ class GHFlowConsole:
         self.console.print()
         self.console.print(Panel(
             Markdown(text),
-            title="[header]Instruction[/header]",
-            border_style="cyan",
+            title="[bold #c15f3c]Instruction[/bold #c15f3c]",
+            border_style="#c15f3c",
             padding=(1, 2),
         ))
 
@@ -96,7 +97,7 @@ class GHFlowConsole:
 
     def print_info(self, text: str) -> None:
         """Print informational text."""
-        self.console.print(f"[info]{text}[/info]")
+        self.console.print(f"[white]⏺ {text}[/white]")
 
     def print_divider(self) -> None:
         """Print a visual divider."""

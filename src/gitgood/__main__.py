@@ -1,4 +1,4 @@
-"""Entry point for running as a module: python -m ghflow"""
+"""Entry point for running as a module: python -m gitgood"""
 
 from .app import main
 

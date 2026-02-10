@@ -9,17 +9,17 @@ from .parser.lexer import CommandLexer, ParseError
 from .parser.executor import CommandExecutor
 from .lessons.engine import LessonEngine, StepType
 from .lessons.loader import load_lessons_from_directory, get_default_lessons_dir
-from .ui.console import GHFlowConsole
+from .ui.console import GitGoodConsole
 from .ui.prompt import CommandPrompt
 from .ui.panels import StatusPanel, LessonProgressPanel, LessonListPanel
 from .ui.tree_view import CommitTreeRenderer
 
 
-class GHFlowApp:
+class GitGoodApp:
     """Main application orchestrator."""
 
     def __init__(self):
-        self.console = GHFlowConsole()
+        self.console = GitGoodConsole()
         self.repo = VirtualRepository()
         self.github = SimulatedGitHub(self.repo)
         self.lexer = CommandLexer()
@@ -249,5 +249,5 @@ class GHFlowApp:
 
 def main() -> None:
     """Entry point."""
-    app = GHFlowApp()
+    app = GitGoodApp()
     app.run()
