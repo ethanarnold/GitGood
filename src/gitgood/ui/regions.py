@@ -12,7 +12,7 @@ ANSI_CLEAR_TO_END = "\033[J"
 class LayoutConfig:
     """Fixed layout dimensions."""
 
-    title_height: int = 10  # ASCII art (7 lines) + tagline + separator
+    title_height: int = 11  # ASCII art (7 lines) + tagline + blank + separator
     instruction_height: int = 10  # Fixed panel height (including borders)
     separator_height: int = 1  # Grey horizontal lines
 

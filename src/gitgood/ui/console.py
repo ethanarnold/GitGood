@@ -58,6 +58,7 @@ class GitGoodConsole:
         art.stylize("#c15f3c")
         self.console.print(art)
         self.console.print("[white]Learn GitHub Flow interactively![/white]")
+        self.console.print()
         self.console.rule(style="grey50")
         self._region_manager._title_rendered = True
 
