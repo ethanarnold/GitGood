@@ -6,7 +6,7 @@ from .core.repository import VirtualRepository
 from .core.github_api import SimulatedGitHub
 from .parser.lexer import CommandLexer, ParseError
 from .parser.executor import CommandExecutor
-from .lessons.engine import LessonEngine, StepType
+from .lessons.engine import LessonEngine, StepType, Lesson
 from .lessons.loader import load_lessons_from_directory, get_default_lessons_dir
 from .ui.console import GitGoodConsole
 from .ui.prompt import CommandPrompt
@@ -74,11 +74,15 @@ class GitGoodApp:
             # For explanation steps, just wait for enter
             if step.step_type == StepType.EXPLANATION:
                 self.prompt.get_simple_input("Press Enter to continue...")
+
+                # Save current lesson before advancing (it gets cleared on completion)
+                completed_lesson = self.lesson_engine.current_lesson
+
                 self.lesson_engine.advance_step()
 
                 # Check if lesson is complete
                 if not self.lesson_engine.get_current_step():
-                    self._handle_lesson_complete()
+                    self._handle_lesson_complete(completed_lesson)
                 return
 
         # Get user input
@@ -114,10 +118,13 @@ class GitGoodApp:
 
         if user_input.lower() == "skip":
             if self.lesson_engine.is_lesson_active():
+                # Save current lesson before advancing (it gets cleared on completion)
+                completed_lesson = self.lesson_engine.current_lesson
+
                 self.lesson_engine.advance_step()
                 self.console.print_warning("Skipped current step.")
                 if not self.lesson_engine.get_current_step():
-                    self._handle_lesson_complete()
+                    self._handle_lesson_complete(completed_lesson)
             return
 
         if user_input.lower() == "status":
@@ -137,12 +144,15 @@ class GitGoodApp:
                 self._execute_command(user_input)
                 self.console.print_success(validation.message)
 
+                # Save current lesson before advancing (it gets cleared on completion)
+                completed_lesson = self.lesson_engine.current_lesson
+
                 # Advance to next step
                 self.lesson_engine.advance_step()
 
                 # Check if lesson is complete
                 if not self.lesson_engine.get_current_step():
-                    self._handle_lesson_complete()
+                    self._handle_lesson_complete(completed_lesson)
             else:
                 self.console.print_error(validation.message)
                 self.console.print_hint(validation.hints)
@@ -233,11 +243,8 @@ class GitGoodApp:
                 self.console.print_error("Failed to start lesson.")
             return
 
-    def _handle_lesson_complete(self) -> None:
+    def _handle_lesson_complete(self, lesson: Lesson | None) -> None:
         """Handle lesson completion."""
-        lesson = self.lesson_engine.lessons.get(
-            list(self.lesson_engine.completed_lessons)[-1]
-        )
         if lesson:
             self.console.print_lesson_complete(lesson.title)
 
