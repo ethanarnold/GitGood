@@ -189,3 +189,7 @@ src/gitgood/
 ## License
 
 MIT
+
+---
+
+Built by [@ethanarnold](https://github.com/ethanarnold) with [Claude Code](https://claude.ai/code)
