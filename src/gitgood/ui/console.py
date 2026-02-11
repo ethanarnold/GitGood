@@ -90,6 +90,13 @@ class GitGoodConsole:
         """Check if we're in buffered mode (instruction is active)."""
         return self._current_instruction is not None
 
+    def _clear_screen(self) -> None:
+        """Clear screen including scrollback buffer."""
+        self.console.file.write("\033[2J")  # Clear screen
+        self.console.file.write("\033[3J")  # Clear scrollback buffer
+        self.console.file.write("\033[H")   # Move cursor to home
+        self.console.file.flush()
+
     def _render_title(self) -> None:
         """Render title region at top of screen."""
         self._region_manager.move_home()
@@ -137,15 +144,11 @@ class GitGoodConsole:
         self.console.rule(style="grey50")
 
     def _redraw(self) -> None:
-        """Clear content area and redraw: instruction + comments + output history."""
-        # Ensure title is rendered first
-        if not self._region_manager._title_rendered:
-            self.console.clear()
-            self._render_title()
-
-        # Clear only below title (preserves title region)
-        self._region_manager.clear_from_row(self._region_manager.config.title_height)
-        self._region_manager.move_to_row(self._region_manager.config.title_height)
+        """Clear screen and redraw everything: title + instruction + comments + output history."""
+        # Clear entire screen including scrollback buffer and re-render from scratch
+        self._clear_screen()
+        self._region_manager._title_rendered = False
+        self._render_title()
 
         # 1. Print instruction panel with minimum height (expands for longer content)
         if self._current_instruction:
@@ -194,7 +197,7 @@ class GitGoodConsole:
 
     def print_welcome(self) -> None:
         """Display welcome message and ASCII art."""
-        self.console.clear()
+        self._clear_screen()
         self._render_title()
         self.console.print(
             "Type [command]help[/command] to see available commands, "
@@ -350,6 +353,6 @@ class GitGoodConsole:
         self._output_buffer.clear()
         self._comments_buffer.clear()
 
-        self.console.clear()
+        self._clear_screen()
         self._region_manager._title_rendered = False
         self._render_title()
