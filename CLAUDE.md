@@ -15,9 +15,9 @@ pip install -e ".[dev]"
 # Run the application
 gitgood
 # or
-python -m gitgood
+python3 -m gitgood
 
-# Run tests
+# Run tests (none exist yet)
 pytest
 pytest --cov=src/gitgood tests/    # with coverage
 pytest tests/test_repository.py   # single file

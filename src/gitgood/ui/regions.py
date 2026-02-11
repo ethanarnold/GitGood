@@ -13,8 +13,9 @@ class LayoutConfig:
     """Fixed layout dimensions."""
 
     title_height: int = 11  # ASCII art (7 lines) + tagline + blank + separator
-    instruction_height: int = 10  # Fixed panel height (including borders)
+    instruction_height: int = 19  # Minimum panel height (can expand for longer content)
     separator_height: int = 1  # Grey horizontal lines
+    comments_height: int = 10  # Comments panel height (title + border + 6 comments)
 
 
 class RegionManager:
@@ -32,6 +33,7 @@ class RegionManager:
             self.config.title_height
             + self.config.separator_height
             + self.config.instruction_height
+            + self.config.comments_height
             + self.config.separator_height
         )
 

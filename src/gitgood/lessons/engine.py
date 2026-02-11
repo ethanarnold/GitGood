@@ -195,6 +195,12 @@ class LessonEngine:
         """Check if a lesson is currently active."""
         return self.current_lesson is not None
 
+    def end_lesson(self) -> None:
+        """End the current lesson without marking it complete."""
+        self.current_lesson = None
+        self.current_step_index = 0
+        self.attempt_count = 0
+
     def get_hint(self) -> str:
         """Get a hint for the current step."""
         step = self.get_current_step()

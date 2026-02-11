@@ -21,6 +21,13 @@ steps:
       - **Request changes** 🔄
       - **Leave comments** 💬
 
+      **Press Enter to continue...**
+
+  - step_id: "intro_workflow"
+    step_type: "explanation"
+    instruction: |
+      # Responding to Feedback
+
       When changes are requested, you:
       1. Make the fixes on your branch
       2. Commit the changes

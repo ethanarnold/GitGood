@@ -119,10 +119,20 @@ steps:
       - "Fix navbar alignment on mobile"
       - "Update dependencies to latest versions"
 
+      **Press Enter to continue...**
+
+  - step_id: "explain_commit_msg_bad"
+    step_type: "explanation"
+    instruction: |
+      # Commit Messages to Avoid
+
       **Bad examples:**
       - "changes"
       - "fixed stuff"
       - "WIP"
+
+      These messages don't explain what changed or why.
+      Your future self (and teammates) will thank you for clear messages!
 
       **Press Enter to continue...**
 

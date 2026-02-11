@@ -180,6 +180,13 @@ steps:
       2. **Make commits** - `git add` + `git commit`
       3. **Push branch** - `git push -u origin feature`
       4. **Create PR** - `gh pr create`
+
+      **Press Enter to continue...**
+
+  - step_id: "summary_complete"
+    step_type: "explanation"
+    instruction: |
+      ## The Complete Workflow (continued):
       5. **Review & update** - Make changes, push updates
       6. **Merge** - `gh pr merge`
       7. **Cleanup** - Delete branch, pull main

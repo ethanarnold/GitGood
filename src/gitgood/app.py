@@ -97,6 +97,7 @@ class GitGoodApp:
             return
 
         if user_input.lower() == "lessons":
+            self.lesson_engine.end_lesson()
             self._show_lessons()
             return
 
@@ -171,17 +172,20 @@ class GitGoodApp:
             self.console.print_error(str(e))
 
     def _show_lessons(self) -> None:
-        """Show the lesson list."""
+        """Show the lesson list with full screen clear."""
         lessons = self.lesson_engine.get_all_lessons()
 
         if not lessons:
             self.console.print_warning("No lessons available.")
             return
 
-        panel = LessonListPanel().render(lessons, self.lesson_engine.completed_lessons)
-        self.console.print_panel(panel)
+        # Clear screen and show title banner
+        self.console.clear_with_title()
 
-        self.console.print_info("Type 'lesson <number>' to start a lesson.")
+        panel = LessonListPanel().render(lessons, self.lesson_engine.completed_lessons)
+        self.console.console.print(panel)
+
+        self.console.console.print("[white]⏺ Type 'lesson <number>' to start a lesson.[/white]")
 
     def _start_lesson(self, lesson_ref: str) -> None:
         """Start a lesson by number or ID."""
